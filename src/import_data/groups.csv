@@ -1,0 +1,6 @@
+id,title,status,course,seats,start_at
+1,"Vue js январь","RECRUITS","Vue",10,"24.01.2020"
+2,"Flask февраль","RECRUITED","Flask",10,"16.02.2020"
+3,"Django февраль","IN_PROGRESS","Django",10,"03.02.2020"
+4,"Flask апрель","ARCHIVED","Flask",10,"14.04.2020"
+5,"Основы Python март","ARCHIVED","Python",10,"11.03.2020"
