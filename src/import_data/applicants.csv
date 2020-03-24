@@ -1,0 +1,22 @@
+name,phone,email,course,status,group
+"Силин Жерар","7(903)388-08-90","noahb@hotmail.com","Python","NEW",
+"Саксаганский Роберт","7(903)584-16-32","wmszeliga@hotmail.com","Python","ASSIGNED_TO_GROUP","Основы Python март"
+"Крюков Кристиан","7(903)292-39-82","raines@icloud.com","Python","ASSIGNED_TO_GROUP","Основы Python март"
+"Негода Андрей","7(903)111-21-69","drjlaw@att.net","Django","PAYED","Django февраль"
+"Шумило Егор","7(903)585-38-69","martink@mac.com","Django","PAYED","Django февраль"
+"Суханов Зуфар","7(903)434-07-70","joelw@comcast.net","Python","NEW",
+"Цветков Харитон","7(903)623-61-55","rnelson@att.net","Vue JS","PROCESS","Vue js январь"
+"Сасько Феликс","7(903)775-84-53","forsberg@outlook.com","Vue JS","PROCESS","Vue js январь"
+"Медведев Устин","7(903)492-26-16","ilial@icloud.com","Flask","ASSIGNED_TO_GROUP","Flask апрель"
+"Фокин Клаус","7(903)510-28-12","malvar@msn.com","Flask","ASSIGNED_TO_GROUP","Flask апрель"
+
+
+
+
+
+
+
+
+
+
+

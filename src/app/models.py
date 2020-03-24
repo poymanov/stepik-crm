@@ -11,6 +11,7 @@ class Course(db.Model):
     title = db.Column(db.String(255), nullable=False)
 
     groups = db.relationship('Group', back_populates='course')
+    applicants = db.relationship('Applicant', back_populates='course')
 
     def __str__(self):
         return self.title
@@ -33,3 +34,31 @@ class Group(db.Model):
     start_at = db.Column(db.Date, nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
     course = db.relationship('Course', back_populates='groups')
+
+    applicants = db.relationship('Applicant', back_populates='group')
+
+    def __str__(self):
+        return self.title
+
+
+class ApplicantStatus(enum.Enum):
+    NEW = 'Новая'
+    PROCESS = 'Обрабатывается'
+    PAYED = 'Оплачена'
+    ASSIGNED_TO_GROUP = 'Распределена в группу'
+
+
+class Applicant(db.Model):
+    __tablename__ = 'applicants'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    status = db.Column(db.Enum(ApplicantStatus), nullable=False)
+
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    course = db.relationship('Course', back_populates='applicants')
+
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    group = db.relationship('Group', back_populates='applicants')
