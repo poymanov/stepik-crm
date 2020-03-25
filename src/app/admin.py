@@ -1,5 +1,6 @@
 from flask_admin.contrib.sqla import ModelView
-from app.models import GroupStatus, ApplicantStatus
+from app.models import db, GroupStatus, ApplicantStatus, Applicant, Group
+from flask_admin import AdminIndexView, expose
 
 
 class GroupModelView(ModelView):
@@ -7,7 +8,8 @@ class GroupModelView(ModelView):
 
     column_list = ('title', 'status', 'course', 'start_at', 'applicants', 'seats')
 
-    column_labels = dict(title='Название', status='Статус', course='Курс', start_at='Старт', applicants='Набрано', seats='Макс. человек')
+    column_labels = dict(title='Название', status='Статус', course='Курс', start_at='Старт', applicants='Набрано',
+                         seats='Макс. человек')
 
     column_formatters = dict(status=lambda v, c, m, p: GroupStatus(m.status).value,
                              start_at=lambda v, c, m, p: m.start_at.strftime('%d.%m.%Y'),
@@ -32,3 +34,19 @@ class ApplicantModelView(ModelView):
     column_labels = dict(name='Имя', phone='Телефон', email='Email', course='Курс', status='Статус', group='Группа')
 
     column_formatters = dict(status=lambda v, c, m, p: ApplicantStatus(m.status).value)
+
+
+class DashboardView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        applicants = {
+            'assigned': db.session.query(Applicant).filter(Applicant.group != None).count(),
+            'not_assigned': db.session.query(Applicant).filter(Applicant.group == None).count(),
+            'last': db.session.query(Applicant).filter(Applicant.group == None,
+                                                       Applicant.status == ApplicantStatus.NEW).order_by(
+                Applicant.id.desc()).limit(3).all()
+        }
+
+        groups = db.session.query(Group).order_by(Group.start_at.asc()).limit(3).all()
+
+        return self.render('admin/index.html', applicants=applicants, groups=groups)

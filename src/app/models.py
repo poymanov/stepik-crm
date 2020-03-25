@@ -40,6 +40,10 @@ class Group(db.Model):
     def __str__(self):
         return self.title
 
+    @classmethod
+    def has_seats(self):
+        return self.seats > len(self.applicants)
+
 
 class ApplicantStatus(enum.Enum):
     NEW = 'Новая'

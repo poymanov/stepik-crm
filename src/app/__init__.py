@@ -5,13 +5,13 @@ from app.models import db, Group, GroupStatus, Course, Applicant, ApplicantStatu
 from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_babelex import Babel
-from app.admin import GroupModelView, CourseModelView, ApplicantModelView
+from app.admin import GroupModelView, CourseModelView, ApplicantModelView, DashboardView
 from app.admin import CourseModelView
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-admin = Admin(app, name='Stepik CRM')
+admin = Admin(app, name='Stepik CRM', index_view=DashboardView())
 
 db.init_app(app)
 migrate = Migrate(app, db)

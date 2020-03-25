@@ -1,0 +1,44 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-6">
+        <div class="well">
+
+            <h2>Заявки</h2>
+            <p>{{ applicants.assigned + applicants.not_assigned }} всего {{ applicants.assigned }} распределены {{
+                applicants.not_assigned }} не распределены</p>
+
+            <h3>Новые заявки</h3>
+            <table class="table">
+                {% for applicant in applicants.last %}
+                <tr>
+                    <td><a href="{{ url_for('applicant.edit_view', id=applicant.id) }}">{{ applicant.course.title }}</a>
+                    </td>
+                    <td>{{ applicant.name }}</td>
+                    <td>{{ applicant.phone }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <a href="{{ url_for('applicant.index_view') }}" class="btn btn-primary">Перейти к заявкам</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="well">
+
+            <h2>Группы</h2>
+            <br>
+            <table class="table">
+                {% for group in groups %}
+                <tr>
+                    <td><a href="{{ url_for('group.edit_view', id=group.id) }}">{{ group.title }}</a></td>
+                    <td>{{ group.applicants | length }} / {{ group.seats }} набрано</td>
+                    <td>{% if group.has_seats %}есть места{% else %}нет мест{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <a href="{{ url_for('group.index_view') }}" class="btn btn-primary">Перейти к группам</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
