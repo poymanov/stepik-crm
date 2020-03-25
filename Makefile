@@ -21,4 +21,7 @@ flush:
 import:
 	docker-compose run web python import.py
 
+create-user:
+	docker-compose run web python users.py
+
 init: init_env migrate import

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Stepik CRM</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+<main class="container">
+    <div class="row">
+        <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+            <form class="form-signin pt-5 mt-5" method="post">
+                {{ form.hidden_tag() }}
+                <div class="text-center m-6 b-1">
+                    <h1 class="h3 mb-3 font-weight-normal">Stepik CRM</h1>
+                    <p class="mb-4">Что-то мы вас не узнали</p>
+                </div>
+
+                {% if form.errors %}
+                <p class="alert alert-danger text-center">Неверный email или пароль</p>
+                {% endif %}
+
+                <div class="form-label-group mb-4">
+                    {{ form.email.label(class='text-muted') }}
+                    {{ form.email(class='form-control', autofocus=autofocus) }}
+                    {% for error in form.email.errors %}
+                    <small class="text-danger d-block">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-label-group mb-5">
+                    {{ form.password.label(class='text-muted') }}
+                    {{ form.password(class='form-control') }}
+                    {% for error in form.password.errors %}
+                    <small class="text-danger d-block">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -6,3 +6,4 @@ psycopg2-binary==2.8.4
 Flask-Admin==1.5.5
 Flask-BabelEx==0.9.4
 Flask-Mail==0.9.1
+validate_email==1.3
