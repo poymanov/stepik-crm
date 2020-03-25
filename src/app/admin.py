@@ -1,8 +1,18 @@
+from flask import redirect, request, url_for
 from flask_admin.contrib.sqla import ModelView
 from app.models import db, GroupStatus, ApplicantStatus, Applicant, Group
 from flask_admin import AdminIndexView, expose, BaseView
 from app.forms import MailerForm
-from app.mailer import mail, send_to_user
+from app.mailer import send_to_user
+import app.services.users as users_service
+
+
+def is_accessible():
+    return users_service.get_auth_user() is not None
+
+
+def inaccessible_callback_url():
+    return url_for('login', next=request.url)
 
 
 class GroupModelView(ModelView):
@@ -19,6 +29,12 @@ class GroupModelView(ModelView):
 
     form_excluded_columns = 'applicants'
 
+    def is_accessible(self):
+        return is_accessible()
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(inaccessible_callback_url())
+
 
 class CourseModelView(ModelView):
     list_template = 'admin/list.html'
@@ -26,6 +42,12 @@ class CourseModelView(ModelView):
     column_labels = dict(title='Название')
 
     form_excluded_columns = ('groups', 'applicants')
+
+    def is_accessible(self):
+        return is_accessible()
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(inaccessible_callback_url())
 
 
 class ApplicantModelView(ModelView):
@@ -36,6 +58,12 @@ class ApplicantModelView(ModelView):
     column_labels = dict(name='Имя', phone='Телефон', email='Email', course='Курс', status='Статус', group='Группа')
 
     column_formatters = dict(status=lambda v, c, m, p: ApplicantStatus(m.status).value)
+
+    def is_accessible(self):
+        return is_accessible()
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(inaccessible_callback_url())
 
 
 class DashboardView(AdminIndexView):
@@ -53,14 +81,44 @@ class DashboardView(AdminIndexView):
 
         return self.render('admin/index.html', applicants=applicants, groups=groups)
 
+    def is_accessible(self):
+        return is_accessible()
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(inaccessible_callback_url())
+
 
 class MailerView(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def index(self):
         form = MailerForm()
         if form.validate_on_submit():
-            send_to_user(form.data.get('email'), form.data.get('subject'),
-                         self.render('admin/mailer/mail-template.html', text=form.data.get('text')))
+            send_to_user(form.email.data, form.subject.data,
+                         self.render('admin/mailer/mail-template.html', text=form.text.data))
             return self.render('admin/mailer/sent.html', form=form)
         else:
             return self.render('admin/mailer/new.html', form=form)
+
+    def is_accessible(self):
+        return is_accessible()
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(inaccessible_callback_url())
+
+
+class UserModelView(ModelView):
+    list_template = 'admin/list.html'
+
+    column_list = ('name', 'email')
+
+    column_labels = dict(name='Имя', email='Email')
+
+    form_excluded_columns = 'password'
+
+    can_create = False
+
+    def is_accessible(self):
+        return is_accessible()
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(inaccessible_callback_url())
