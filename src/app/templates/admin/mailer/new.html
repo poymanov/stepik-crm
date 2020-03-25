@@ -1,0 +1,42 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-6">
+
+        <h3>Отправить письмо</h3>
+
+        <br>
+
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.email.label }}
+                {{ form.email(class='form-control') }}
+                {% for error in form.email.errors %}
+                    <small class="text-danger d-block">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <br>
+            <div>
+                {{ form.subject.label }}
+                {{ form.subject(class='form-control') }}
+                {% for error in form.subject.errors %}
+                    <small class="text-danger d-block">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <br>
+            <div>
+                {{ form.text.label }}
+                {{ form.text(class='form-control') }}
+                {% for error in form.text.errors %}
+                    <small class="text-danger d-block">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Отправить"/>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,8 @@
 from flask_admin.contrib.sqla import ModelView
 from app.models import db, GroupStatus, ApplicantStatus, Applicant, Group
-from flask_admin import AdminIndexView, expose
+from flask_admin import AdminIndexView, expose, BaseView
+from app.forms import MailerForm
+from app.mailer import mail, send_to_user
 
 
 class GroupModelView(ModelView):
@@ -50,3 +52,15 @@ class DashboardView(AdminIndexView):
         groups = db.session.query(Group).order_by(Group.start_at.asc()).limit(3).all()
 
         return self.render('admin/index.html', applicants=applicants, groups=groups)
+
+
+class MailerView(BaseView):
+    @expose('/', methods=('GET', 'POST'))
+    def index(self):
+        form = MailerForm()
+        if form.validate_on_submit():
+            send_to_user(form.data.get('email'), form.data.get('subject'),
+                         self.render('admin/mailer/mail-template.html', text=form.data.get('text')))
+            return self.render('admin/mailer/sent.html', form=form)
+        else:
+            return self.render('admin/mailer/new.html', form=form)
